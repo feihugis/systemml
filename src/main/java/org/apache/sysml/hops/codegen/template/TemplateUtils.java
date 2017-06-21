@@ -65,6 +65,11 @@ public class TemplateUtils
 			  || hop.getDim1() == 1 && hop.getDim2() != 1 ) );
 	}
 	
+	public static boolean isColVector(Hop hop) {
+		return (hop.getDataType() == DataType.MATRIX 
+			&& hop.getDim1() != 1 && hop.getDim2() == 1 );
+	}
+	
 	public static boolean isColVector(CNode hop) {
 		return (hop.getDataType() == DataType.MATRIX 
 			&& hop.getNumRows() != 1 && hop.getNumCols() == 1);
@@ -245,6 +250,9 @@ public class TemplateUtils
 			&& !(output instanceof AggBinaryOp && HopRewriteUtils
 				.isTransposeOfItself(output.getInput().get(0),input)))
 			return RowType.ROW_AGG;
+		else if( output instanceof AggUnaryOp 
+			&& ((AggUnaryOp)output).getDirection()==Direction.RowCol )
+			return RowType.FULL_AGG;
 		else if( output.getDim1()==input.getDim2() && output.getDim2()==1 )
 			return RowType.COL_AGG_T;
 		else

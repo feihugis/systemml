@@ -83,6 +83,10 @@ public abstract class CNode
 		_generated = false;
 	}
 	
+	public void resetHash() {
+		_hash = 0;
+	}
+	
 	public void setNumRows(long rows) {
 		_rows = rows;
 	}
@@ -146,7 +150,7 @@ public abstract class CNode
 		setVisited(false);
 	}
 	
-	public abstract String codegen(boolean sparse) ;
+	public abstract String codegen(boolean sparse);
 	
 	public abstract void setOutputDims();
 	

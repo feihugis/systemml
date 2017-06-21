@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import org.apache.sysml.hops.HopsException;
-import org.apache.sysml.hops.OptimizerUtils;
 import org.apache.sysml.parser.DMLProgram;
 import org.apache.sysml.parser.FunctionStatementBlock;
 import org.apache.sysml.parser.LanguageException;
@@ -44,7 +43,7 @@ public class IPAPassRemoveUnusedFunctions extends IPAPass
 	}
 	
 	@Override
-	public void rewriteProgram( DMLProgram prog, FunctionCallGraph fgraph ) 
+	public void rewriteProgram( DMLProgram prog, FunctionCallGraph fgraph, FunctionCallSizeInfo fcallSizes ) 
 		throws HopsException
 	{
 		try {

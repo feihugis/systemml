@@ -110,8 +110,8 @@ public class OptimizerUtils
 	 */
 	public static boolean ALLOW_CONSTANT_FOLDING = true;
 	
-	public static boolean ALLOW_ALGEBRAIC_SIMPLIFICATION = true; 
-	public static boolean ALLOW_OPERATOR_FUSION = true; 
+	public static boolean ALLOW_ALGEBRAIC_SIMPLIFICATION = true;
+	public static boolean ALLOW_OPERATOR_FUSION = true;
 	
 	/**
 	 * Enables if-else branch removal for constant predicates (original literals or 
@@ -199,10 +199,7 @@ public class OptimizerUtils
 	 * 
 	 */
 	public static final boolean ALLOW_COMBINE_FILE_INPUT_FORMAT = true;
-	
-	
-	public static long GPU_MEMORY_BUDGET = -1;
-	
+
 	//////////////////////
 	// Optimizer levels //
 	//////////////////////
