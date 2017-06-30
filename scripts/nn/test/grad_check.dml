@@ -1855,18 +1855,14 @@ softmax2d = function() {
   # Generate data
   N = 3  # num examples
   C = 10  # num classes
-  Hin = 28  # example height
-  Win = 28  # example width
+  Hin = 5  # example height
+  Win = 5  # example width
 
   X = rand(rows=N, cols=C*Hin*Win)
   y = rand(rows=N, cols=C*Hin*Win, min=0, max=1, pdf="uniform")
   y_C_NHW = util::transpose_NCHW_to_CNHW(y, C)
   y_NHW_C = t(y_C_NHW)
   y_NHW_C = y_NHW_C / rowSums(y_NHW_C)
-  
-  #Transpose X from N_CHW to NHW_C
-  X_C_NHW = util::transpose_NCHW_to_CNHW(X, N)
-  X_NHW_C = t(X_C_NHW)
 
   # Compute analytical gradients of loss wrt parameters
   out = softmax2d::forward(X, C)
