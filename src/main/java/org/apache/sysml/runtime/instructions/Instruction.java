@@ -70,7 +70,7 @@ public abstract class Instruction
 	public INSTRUCTION_TYPE getType() {
 		return type;
 	}
-	
+
 	public void setLocation(String filename, int beginLine, int endLine, int beginCol, int endCol) {
 		this.filename = filename;
 		this.beginLine = beginLine;
