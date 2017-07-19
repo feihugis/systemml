@@ -95,7 +95,6 @@ public final class MatrixIndexingCPInstruction extends IndexingCPInstruction
 
 				resultBlock = matBlock.leftIndexingOperations(rhsMatBlock, ixrange, new MatrixBlock(), updateType, getExtendedOpcode());
 				ec.releaseMatrixInput(input2.getName(), getExtendedOpcode());
-
 			}
 			else //MATRIX<-SCALAR 
 			{

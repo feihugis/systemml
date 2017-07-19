@@ -372,6 +372,7 @@ public class ExecutionContext {
 		long t1 = opcode != null && DMLScript.STATISTICS && DMLScript.FINEGRAINED_STATISTICS ? System.nanoTime() : 0;
 		MatrixObject mo = getMatrixObject(varName);
 		mo.release(opcode);
+
 		if(opcode != null && DMLScript.STATISTICS && DMLScript.FINEGRAINED_STATISTICS) {
 			long t2 = System.nanoTime();
 			GPUStatistics.maintainCPMiscTimes(opcode, CPInstruction.MISC_TIMER_RELEASE_INPUT_MB, t2-t1);
