@@ -1135,7 +1135,7 @@ public class OptimizerUtils
 		double tmp = rEvalSimpleDoubleExpression(root, dvalMemo);
 		if( tmp!=Double.MAX_VALUE )
 			ret = UtilFunctions.toLong( tmp );
-		
+
 		return ret;
 	}
 	

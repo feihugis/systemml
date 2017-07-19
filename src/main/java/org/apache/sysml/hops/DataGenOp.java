@@ -117,7 +117,7 @@ public class DataGenOp extends Hop implements MultiThreadedHop
 		
 		//compute unknown dims and nnz
 		refreshSizeInformation();
-	}
+ 	}
 
 	@Override
 	public void checkArity() throws HopsException {

@@ -231,7 +231,7 @@ public class ConvolutionCPInstruction extends UnaryCPInstruction
 		}
 		else
 			outputBlock = new MatrixBlock(input.getNumRows(), input.getNumColumns(), true);
-		
+
 		// release inputs/outputs
 		ec.releaseMatrixInput(input1.getName(), getExtendedOpcode());
 		ec.releaseMatrixInput(_in2.getName(), getExtendedOpcode());

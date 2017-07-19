@@ -56,8 +56,19 @@ public class ConvolutionUtils {
 		return (W + 2 * widthPadding - S) / horizontalStride + 1;
 	}
 
-	
-	// Performs dest[destPos...] op= thatValue[src_rl:src_ru,]
+
+  /**
+   *
+   * @param src
+   * @param dest
+   * @param destPos
+   * @param destNumCols
+   * @param src_rl
+   * @param src_ru
+   * @param op
+   * @throws DMLRuntimeException
+   */
+  // Performs dest[destPos...] op= thatValue[src_rl:src_ru,]
 	public static void binaryOperationInPlace(MatrixBlock src, double [] dest, 
 			int destPos, int destNumCols, int src_rl, int src_ru, BinaryOperator op) throws DMLRuntimeException {
 		if(src.isInSparseFormat()) {

@@ -2305,7 +2305,7 @@ public class Dag<N extends Lop>
 		OutputParameters oparams = node.getOutputParameters();
 		NodeOutput out = new NodeOutput();
 		
-		node.setConsumerCount(node.getOutputs().size());
+ 		node.setConsumerCount(node.getOutputs().size());
 		
 		// Compute the output format for this node
 		out.setOutInfo(getOutputInfo(node, cellModeOverride));

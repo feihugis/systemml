@@ -933,7 +933,7 @@ public class ProgramConverter
 		for( Instruction linst : inst )
 		{
 			//check that only cp instruction are transmitted 
-			if( !( linst instanceof CPInstruction || linst instanceof ExternalFunctionInvocationInstruction ) )
+			if( !( linst instanceof CPInstruction || linst instanceof ExternalFunctionInvocationInstruction) )
 				throw new DMLRuntimeException( NOT_SUPPORTED_MR_INSTRUCTION + " " +linst.getClass().getName()+"\n"+linst );
 			
 			//obtain serialized version of generated classes

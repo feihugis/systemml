@@ -170,7 +170,6 @@ public class DataGen extends Lop
 		}
 				
 		StringBuilder sb = new StringBuilder( );
-		
 		sb.append( getExecType() );
 		sb.append( Lop.OPERAND_DELIMITOR );
 
