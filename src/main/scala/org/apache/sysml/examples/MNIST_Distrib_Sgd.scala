@@ -19,7 +19,7 @@ object MNIST_Distrib_Sgd {
     conf.set("spark.testing.memory", memSize.toString)*/
 
     val sc = new SparkContext(conf)
-    sc.setLogLevel("OFF")
+    //sc.setLogLevel("OFF")
     val ml = new MLContext(sc)
     //ml.setExplain(true)
     //ml.setExplainLevel(MLContext.ExplainLevel.RECOMPILE_RUNTIME)
