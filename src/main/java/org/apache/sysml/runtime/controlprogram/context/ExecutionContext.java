@@ -363,7 +363,7 @@ public class ExecutionContext {
 	}
 	
 	/**
-	 * Unpins a currently pinned matrix variable and update fine-grained statistics. 
+	 * Unpins a currently pinned matrix variable and update fine-grained statistics.
 	 * 
 	 * @param varName variable name
 	 * @throws DMLRuntimeException if DMLRuntimeException occurs

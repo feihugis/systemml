@@ -92,8 +92,10 @@ public final class MatrixIndexingCPInstruction extends IndexingCPInstruction
 			if(input2.getDataType() == DataType.MATRIX) //MATRIX<-MATRIX
 			{
 				MatrixBlock rhsMatBlock = ec.getMatrixInput(input2.getName(), getExtendedOpcode());
+
 				resultBlock = matBlock.leftIndexingOperations(rhsMatBlock, ixrange, new MatrixBlock(), updateType, getExtendedOpcode());
 				ec.releaseMatrixInput(input2.getName(), getExtendedOpcode());
+
 			}
 			else //MATRIX<-SCALAR 
 			{

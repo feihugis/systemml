@@ -996,6 +996,10 @@ public class MatrixBlock extends MatrixValue implements CacheBlock, Externalizab
 	 * @param opcode  extended opcode
 	 * @throws DMLRuntimeException if DMLRuntimeException occurs
 	 */
+<<<<<<< HEAD
+=======
+	@SuppressWarnings("unused")
+>>>>>>> Reversible proof-of-concept commit that demonstrate how we can provide
 	public void examSparsity(String opcode) 
 		throws DMLRuntimeException
 	{
