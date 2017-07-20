@@ -21,8 +21,13 @@ object MNIST_Distrib_Sgd {
     val sc = new SparkContext(conf)
     //sc.setLogLevel("OFF")
     val ml = new MLContext(sc)
+    ml.setStatistics(true)
+    ml.setStatisticsMaxHeavyHitters(10000)
+
+
+    //ml.setConfigProperty("systemml.stats.finegrained ", "true")
     //ml.setExplain(true)
-    //ml.setExplainLevel(MLContext.ExplainLevel.RECOMPILE_RUNTIME)
+    ml.setExplainLevel(MLContext.ExplainLevel.RECOMPILE_RUNTIME)
     org.apache.sysml.api.DMLScript.rtplatform = org.apache.sysml.api.DMLScript.RUNTIME_PLATFORM.HYBRID_SPARK
 
     val clf = new Mnist_lenet_distrib_sgd()

@@ -1,0 +1,2 @@
+[alias]
+  pr = "!f() { git fetch ${2:-upstream} pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
