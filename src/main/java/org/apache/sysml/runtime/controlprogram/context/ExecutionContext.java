@@ -444,15 +444,19 @@ public class ExecutionContext {
 		}
 		mo.getGPUObject(getGPUContext(0)).releaseOutput();
 	}
-	
 
 	public void setMatrixOutput(String varName, MatrixBlock outputData, String opcode) 
 			throws DMLRuntimeException 
 	{
+		opcode = opcode == null || opcode.equals("") ? null : opcode; 
 		MatrixObject mo = getMatrixObject(varName);
 		mo.acquireModify(outputData, opcode);
 	    mo.release(opcode);
 	    setVariable(varName, mo);
+	}
+	
+	public void setMatrixOutput(String varName, MatrixBlock outputData, UpdateType flag) throws DMLRuntimeException {
+		setMatrixOutput(varName, outputData, flag, null);
 	}
 
 	public void setMatrixOutput(String varName, MatrixBlock outputData, UpdateType flag, String opcode) 
