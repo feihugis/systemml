@@ -223,7 +223,7 @@ public class ConvolutionCPInstruction extends UnaryCPInstruction
 		MatrixBlock input = ec.getMatrixInput(input1.getName(), getExtendedOpcode());
 		MatrixBlock dout = ec.getMatrixInput(_in2.getName(), getExtendedOpcode());
 		MatrixBlock outputBlock;
-		
+
 		if( !input.isEmpty() && !dout.isEmpty() ) {
 			outputBlock = new MatrixBlock(input.getNumRows(), input.getNumColumns(), false);
 			outputBlock.allocateDenseBlock();
