@@ -27,6 +27,7 @@ try:
     import py4j.java_gateway
     from py4j.java_gateway import JavaObject
     from pyspark import SparkContext
+    from pyspark.conf import SparkConf
     import pyspark.mllib.common
 except ImportError:
     raise ImportError('Unable to import `pyspark`. Hint: Make sure you are running with PySpark.')
@@ -606,6 +607,40 @@ class MLContext(object):
     def __repr__(self):
         return "MLContext"
     
+    def getHopDAG(self, script, lines=None, conf=None, apply_rewrites=True):
+        """
+        Compile a DML / PyDML script.
+
+        Parameters
+        ----------
+        script: Script instance
+            Script instance defined with the appropriate input and output variables.
+        
+        lines: list of integers
+            Optional: only display the hops that have begin and end line number equals to the given integers.
+        
+        conf: SparkConf instance
+            Optional spark configuration
+            
+        apply_rewrites: boolean
+            If true, perform static rewrites, perform intra-/inter-procedural analysis to propagate size information into functions and apply dynamic rewrites
+        
+        Returns
+        -------
+        hopDAG: string
+            hop DAG in dot format 
+        """
+        if not isinstance(script, Script):
+            raise ValueError("Expected script to be an instance of Script")
+        scriptString = script.scriptString
+        script_java = script.script_java
+        lines = [ int(x) for x in lines] if lines is not None else [int(-1)]
+        if conf is not None:
+            hopDAG = self._ml.getHopDAG(script_java, lines, conf._jconf, apply_rewrites)
+        else:
+            hopDAG = self._ml.getHopDAG(script_java, lines, apply_rewrites)
+        return hopDAG 
+        
     def execute(self, script):
         """
         Execute a DML / PyDML script.
