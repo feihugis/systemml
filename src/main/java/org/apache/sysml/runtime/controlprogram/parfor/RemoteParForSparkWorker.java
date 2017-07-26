@@ -30,9 +30,12 @@ import org.apache.spark.api.java.function.PairFlatMapFunction;
 import org.apache.spark.util.LongAccumulator;
 import org.apache.sysml.runtime.DMLRuntimeException;
 import org.apache.sysml.runtime.codegen.CodegenUtils;
+import org.apache.sysml.runtime.controlprogram.ProgramBlock;
 import org.apache.sysml.runtime.controlprogram.caching.CacheableData;
 import org.apache.sysml.runtime.controlprogram.parfor.stat.InfrastructureAnalyzer;
 import org.apache.sysml.runtime.controlprogram.parfor.util.IDHandler;
+import org.apache.sysml.runtime.instructions.Instruction;
+import org.apache.sysml.runtime.instructions.cp.CPInstruction;
 import org.apache.sysml.runtime.util.LocalFileUtils;
 
 import scala.Tuple2;
@@ -69,6 +72,17 @@ public class RemoteParForSparkWorker extends ParWorker implements PairFlatMapFun
 		//lazy parworker initialization
 		if( !_initialized )
 			configureWorker( TaskContext.get().taskAttemptId() );
+
+                if (_childBlocks != null) {
+                  for (ProgramBlock programBlock : _childBlocks) {
+                    for (Instruction instruction : programBlock.getInstructions()) {
+                      System.out.println(instruction.getClass().toString() + "          " + instruction);
+                      if (instruction.toString().contains("_t0")) {
+                        System.out.println("++++++++++" + instruction);
+                      }
+                    }
+                  }
+                }
 		
 		//execute a single task
 		long numIter = getExecutedIterations();
