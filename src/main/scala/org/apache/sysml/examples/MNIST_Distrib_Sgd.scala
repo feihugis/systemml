@@ -45,26 +45,17 @@ object MNIST_Distrib_Sgd {
     val epochs = 1
 
     val dummy = clf.generate_dummy_data(N, C, Hin, Win, K)
-<<<<<<< HEAD
-    val dummyVal = clf.generate_dummy_data(Nval, C, Hin, Win, K)
-=======
+
     println(dummy.X.toBinaryBlocks.count())
    val dummyVal = clf.generate_dummy_data(Nval, C, Hin, Win, K)
->>>>>>> Updates
     val dummyTest = clf.generate_dummy_data(Ntest, C, Hin, Win, K)
 
     val params = clf.train(dummy.X, dummy.Y, dummyVal.X, dummyVal.Y, C, Hin, Win, batchSize, paralellBatches, epochs)
     println(params.toString)
 
-<<<<<<< HEAD
-    val probs = clf.predict(dummyTest.X, C, Hin, Win, params.W1, params.b1, params.W2, params.b2, params.W3, params.b3, params.W4, params.b4)
-    val perf = clf.eval(probs, dummyTest.Y)
-    println(perf)
-=======
     //val probs = clf.predict(dummyTest.X, C, Hin, Win, params.W1, params.b1, params.W2, params.b2, params.W3, params.b3, params.W4, params.b4)
     //val perf = clf.eval(probs, dummyTest.Y)
     //println(perf)
->>>>>>> Updates
   }
 
 }
