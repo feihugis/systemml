@@ -994,6 +994,7 @@ public class SparkExecutionContext extends ExecutionContext
 		lrdd = lrdd.mapValues(new ComputeBinaryBlockNnzFunction(aNnz));
 
 		//save file is an action which also triggers nnz maintenance
+
 		lrdd.saveAsHadoopFile(path,
 				oinfo.outputKeyClass,
 				oinfo.outputValueClass,

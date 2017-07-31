@@ -76,10 +76,14 @@ public class RemoteParForSparkWorker extends ParWorker implements PairFlatMapFun
                 if (_childBlocks != null) {
                   for (ProgramBlock programBlock : _childBlocks) {
                     for (Instruction instruction : programBlock.getInstructions()) {
-                      System.out.println(instruction.getClass().toString() + "          " + instruction);
-                      if (instruction.toString().contains("_t0")) {
+                      if (instruction.toString().contains("rangeReIndex")) {
                         System.out.println("++++++++++" + instruction);
-                      }
+                        /*instruction.preprocessInstruction(_ec);
+                        instruction.processInstruction(_ec);
+                        instruction.postprocessInstruction(_ec);
+                        System.out.println("++++++++++" + instruction);*/
+                      } //else
+                        //System.out.println(instruction.getClass().toString() + "          " + instruction);
                     }
                   }
                 }
