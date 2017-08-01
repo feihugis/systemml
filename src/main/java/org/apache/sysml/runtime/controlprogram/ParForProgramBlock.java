@@ -1324,13 +1324,20 @@ public class ParForProgramBlock extends ForProgramBlock
 			//optimization to prevent unnecessary export of matrices
 			//export only variables that are read in the body
 			VariableSet varsRead = sb.variablesRead();
+			int totalNumOfVars = varsRead.getVariableNames().size();
+			int expNumOfVars = 0;
 			for (String key : ec.getVariables().keySet() ) {
 				if(varsRead.containsVariable(key) && !blacklist.contains(key)) {
 					Data d = ec.getVariable(key);
-					if( d.getDataType() == DataType.MATRIX && !MapReduceTool.existsFileOnHDFS(((MatrixObject)d).getFileName()))
-						((MatrixObject)d).exportData(_replicationExport);
+					if( d.getDataType() == DataType.MATRIX && !MapReduceTool.existsFileOnHDFS(((MatrixObject)d).getFileName())) {
+					  LOG.info("Export the variable " + key + " to HDFS " + ((MatrixObject)d).getFileName());
+                                          ((MatrixObject)d).exportData(_replicationExport);
+                                          expNumOfVars++;
+                                        }
+
 				}
 			}
+			LOG.info("The ratio of variables exported by read: " + expNumOfVars + "/" + totalNumOfVars);
 		}
 		else
 		{
