@@ -242,7 +242,7 @@ train = function(matrix[double] X, matrix[double] Y,
       if (g %% 10 == 0) {
         # Get a mini-batch in this group
 
-        batch_beg = group_beg + ((j-1) * batch_size) %% nrow_group + 1
+        batch_beg = group_beg + ((j-1) * batch_size) %% nrow_group
         batch_end = min(N, batch_beg + batch_size - 1)
         nrow_batch = batch_end - batch_beg + 1
 
