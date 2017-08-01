@@ -1329,7 +1329,8 @@ public class ParForProgramBlock extends ForProgramBlock
 			for (String key : ec.getVariables().keySet() ) {
 				if(varsRead.containsVariable(key) && !blacklist.contains(key)) {
 					Data d = ec.getVariable(key);
-					if( d.getDataType() == DataType.MATRIX && !MapReduceTool.existsFileOnHDFS(((MatrixObject)d).getFileName())) {
+					//&& !MapReduceTool.existsFileOnHDFS(((MatrixObject)d).getFileName())
+					if( d.getDataType() == DataType.MATRIX && !MapReduceTool.existsFileOnHDFS(((MatrixObject)d).getFileName()) ) {
 					  LOG.info("Export the variable " + key + " to HDFS " + ((MatrixObject)d).getFileName());
                                           ((MatrixObject)d).exportData(_replicationExport);
                                           expNumOfVars++;
