@@ -769,15 +769,18 @@ public abstract class CacheableData<T extends CacheBlock> extends Data
 	public synchronized void exportData (String fName, String outputFormat, int replication, FileFormatProperties formatProperties, String opcode)
 		throws CacheException
 	{
+	        if (fName.contains("temp6_0")) {
+                    LOG.info("Start to exportData " + fName);
+                }
 		if( LOG.isTraceEnabled() )
-			LOG.trace("Export data "+getVarName()+" "+fName);
+			LOG.info("Export data "+getVarName()+" "+fName);
 		long t0 = DMLScript.STATISTICS ? System.nanoTime() : 0;
 		
 		//prevent concurrent modifications
 		if ( !isAvailableToRead() )
 			throw new CacheException ("MatrixObject not available to read.");
 
-		LOG.trace("Exporting " + this.getDebugName() + " to " + fName + " in format " + outputFormat);
+		LOG.info("Exporting " + this.getDebugName() + " to " + fName + " in format " + outputFormat);
 		
 		//TODO remove
         boolean copiedFromGPU = false;
@@ -834,6 +837,9 @@ public abstract class CacheableData<T extends CacheBlock> extends Data
 			try
 			{
 				writeMetaData( fName, outputFormat, formatProperties );
+				if (fName.contains("temp6_0")) {
+				  System.out.println("Export file Name containing temp6_0" + fName );
+                                }
 				writeBlobToHDFS( fName, outputFormat, replication, formatProperties );
 				if ( !pWrite )
 					setDirty(false);
@@ -885,7 +891,7 @@ public abstract class CacheableData<T extends CacheBlock> extends Data
 		else 
 		{
 			//CASE 4: data already in hdfs (do nothing, no need for export)
-			LOG.trace(this.getDebugName() + ": Skip export to hdfs since data already exists.");
+			LOG.info(this.getDebugName() + ": Skip export to hdfs since data already exists.");
 		}
 		  
 		if( DMLScript.STATISTICS ){

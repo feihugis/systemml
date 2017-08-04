@@ -71,7 +71,7 @@ public class MatrixObject extends CacheableData<MatrixBlock>
 	}
 	
 	//additional matrix-specific flags
-	private UpdateType _updateType = UpdateType.COPY; 
+	private UpdateType _updateType = UpdateType.COPY;
 	
 	//information relevant to partitioned matrices.
 	private boolean _partitioned = false; //indicates if obj partitioned

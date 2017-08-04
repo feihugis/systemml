@@ -110,6 +110,7 @@ import org.apache.sysml.runtime.util.UtilFunctions;
 import org.apache.sysml.utils.Statistics;
 import org.apache.sysml.yarn.ropt.YarnClusterAnalyzer;
 
+import scala.tools.nsc.backend.jvm.BTypes;
 
 
 /**
@@ -1330,8 +1331,12 @@ public class ParForProgramBlock extends ForProgramBlock
 				if(varsRead.containsVariable(key) && !blacklist.contains(key)) {
 					Data d = ec.getVariable(key);
 					//&& !MapReduceTool.existsFileOnHDFS(((MatrixObject)d).getFileName())
-					if( d.getDataType() == DataType.MATRIX && !MapReduceTool.existsFileOnHDFS(((MatrixObject)d).getFileName()) ) {
-					  LOG.info("Export the variable " + key + " to HDFS " + ((MatrixObject)d).getFileName());
+					if( d.getDataType() == DataType.MATRIX /*&& !MapReduceTool.existsFileOnHDFS(((MatrixObject)d).getFileName())*/ ) {
+					  boolean isFileExist = MapReduceTool.existsFileOnHDFS(((MatrixObject)d).getFileName());
+					  LOG.info("*** Export the variable " + key + " to HDFS " + ((MatrixObject)d).getFileName() + " ifExists? " + isFileExist);
+					  if (key.equalsIgnoreCase("X") && !isFileExist) {
+					    LOG.info("---------- Track X");
+                                          }
                                           ((MatrixObject)d).exportData(_replicationExport);
                                           expNumOfVars++;
                                         }
