@@ -148,21 +148,26 @@ public class ReaderBinaryBlockParallel extends ReaderBinaryBlock
 			
 			//directly read from sequence files (individual partfiles)
 			SequenceFile.Reader reader = new SequenceFile.Reader(_fs,_path,_job);
+
+
 			
 			try
 			{
+                                System.out.println("****** Path is " + this._path.toString() + String.format(" row length %d; column length %d ", _rlen, _clen));
 				//note: next(key, value) does not yet exploit the given serialization classes, record reader does but is generally slower.
 				while( reader.next(key, value) )
 				{	
 					//empty block filter (skip entire block)
 					if( value.isEmptyBlock(false) )
 						continue;
-					
+
 					int row_offset = (int)(key.getRowIndex()-1)*_brlen;
 					int col_offset = (int)(key.getColumnIndex()-1)*_bclen;
 					
 					int rows = value.getNumRows();
 					int cols = value.getNumColumns();
+
+                                        System.out.println(String.format("              Key is (%d , %d) ~ (%d , %d) ", row_offset, col_offset, row_offset + rows, col_offset + cols ) + "  value size is " + value.getInMemorySize());
 					
 					//bound check per block
 					if( row_offset + rows < 0 || row_offset + rows > _rlen || col_offset + cols<0 || col_offset + cols > _clen )
@@ -209,6 +214,8 @@ public class ReaderBinaryBlockParallel extends ReaderBinaryBlock
 			{
 				IOUtilFunctions.closeSilently(reader);
 			}
+
+
 			
 			return lnnz;
 		}

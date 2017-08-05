@@ -1,16 +1,7 @@
 package org.apache.sysml.examples
 
 import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.sysml.api.mlcontext.ScriptFactory.dml
 import org.apache.sysml.api.mlcontext._
-import org.apache.sysml.examples.MNIST_Distrib_Sgd.readMatrix
-import org.apache.sysml.parser.Expression.ValueType
-import org.apache.sysml.runtime.controlprogram.caching.MatrixObject
-import org.apache.sysml.runtime.controlprogram.caching.MatrixObject.UpdateType
-import org.apache.sysml.runtime.controlprogram.context.SparkExecutionContext
-import org.apache.sysml.runtime.io.{MatrixReaderFactory, MatrixWriter, MatrixWriterFactory}
-import org.apache.sysml.runtime.matrix.data.InputInfo
-import org.apache.sysml.runtime.util.MapReduceTool
 import org.apache.sysml.scripts.nn.examples.Mnist_lenet_distrib_sgd
 
 /**

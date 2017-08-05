@@ -61,8 +61,11 @@ public final class MatrixIndexingCPInstruction extends IndexingCPInstruction
 			else //via slicing the in-memory matrix
 			{
 				//execute right indexing operation
-				MatrixBlock matBlock = ec.getMatrixInput(input1.getName(), getExtendedOpcode());
-				resultBlock = matBlock.sliceOperations(ixrange, new MatrixBlock());	
+				//MatrixBlock matBlock = ec.getMatrixInput(input1.getName(), getExtendedOpcode());
+				//MatrixBlock resultBlock_old = matBlock.sliceOperations(ixrange, new MatrixBlock());
+
+                                resultBlock = ec.subMatrixInput(input1.getName(), getExtendedOpcode(), ixrange);
+
 				
 				//unpin rhs input
 				ec.releaseMatrixInput(input1.getName(), getExtendedOpcode());

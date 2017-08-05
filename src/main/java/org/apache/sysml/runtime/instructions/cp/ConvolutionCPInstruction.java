@@ -452,6 +452,10 @@ public class ConvolutionCPInstruction extends UnaryCPInstruction
 	}
 	
 	private MatrixBlock getDenseOutputBlock(int numRows, int numCols) throws DMLRuntimeException {
+	        System.out.println(String.format("Create the Matrix with the Size %d * %d" + this.toString(), numCols, numRows));
+	        if (numRows == 401408) {
+	          System.out.println( "-----------" +  this.toString());
+                }
 		MatrixBlock outputBlock = new MatrixBlock(numRows, numCols, false);
 		outputBlock.allocateDenseBlock();
 		return outputBlock;

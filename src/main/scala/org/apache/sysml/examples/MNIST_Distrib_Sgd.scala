@@ -3,14 +3,7 @@ package org.apache.sysml.examples
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.sysml.api.mlcontext.ScriptFactory.dml
 import org.apache.sysml.api.mlcontext._
-import org.apache.sysml.parser.Expression.ValueType
-import org.apache.sysml.runtime.controlprogram.caching.MatrixObject
-import org.apache.sysml.runtime.controlprogram.caching.MatrixObject.UpdateType
-import org.apache.sysml.runtime.controlprogram.context.SparkExecutionContext
-import org.apache.sysml.runtime.io.{MatrixReaderFactory, MatrixWriter, MatrixWriterFactory}
-import org.apache.sysml.runtime.matrix.data.InputInfo
-import org.apache.sysml.runtime.util.MapReduceTool
-import org.apache.sysml.scripts.nn.examples.Mnist_lenet_distrib_sgd
+import org.apache.sysml.scripts.nn.examples.{Mnist_lenet_distrib_sgd, Mnist_lenet_distrib_sgd_optimize}
 
 object MNIST_Distrib_Sgd {
 
@@ -19,20 +12,18 @@ object MNIST_Distrib_Sgd {
   }
 
   def readMatrix(file: String, ml: MLContext): Matrix = {
-    //val matrixObj = new MatrixObject(ValueType.DOUBLE, file)
-    //new Matrix(matrixObj, ec)
     val s =
       """
-        x = read("scratch_space/X_input")
+        x = read(file)
       """
 
-    val scr = dml(s).out("x")
+    val scr = dml(s).in(Map("file" -> file)).out("x")
     val res = ml.execute(scr)
     res.getMatrix("x")
   }
 
   def createMNISTDummyData(X_file: String, Y_file: String, X_val_file: String, Y_val_file: String): Unit = {
-    val N = 3200
+    val N = 32
     val Nval = 32
     val Ntest = 32
     val C = 3
@@ -78,13 +69,13 @@ object MNIST_Distrib_Sgd {
     //sc.setLogLevel("TRACE")
 
     val ml = new MLContext(sc)
-    configMLContext(ml)
+    //configMLContext(ml)
 
     org.apache.sysml.api.DMLScript.rtplatform = org.apache.sysml.api.DMLScript.RUNTIME_PLATFORM.HYBRID_SPARK
 
-    val clf = new Mnist_lenet_distrib_sgd()
+    val clf = new Mnist_lenet_distrib_sgd_optimize()
 
-    val N = 3200
+    val N = 32
     val Nval = 32
     val Ntest = 32
     val C = 3
@@ -100,10 +91,14 @@ object MNIST_Distrib_Sgd {
     val X_val_file = "scratch_space/X_val_input"
     val Y_val_file = "scratch_space/Y_val_input"
 
+    createMNISTDummyData(X_file, Y_file, X_val_file, Y_val_file)
+
     val X = readMatrix(X_file, ml)
     val Y = readMatrix(Y_file, ml)
     val X_val = readMatrix(X_val_file, ml)
     val Y_val = readMatrix(Y_val_file, ml)
+
+    println(X.getMatrixMetadata)
 
     val params = clf.train(X, Y, X_val, Y_val, C, Hin, Win, batchSize, paralellBatches, epochs)
     println(params.toString)

@@ -36,6 +36,7 @@ import org.apache.sysml.runtime.DMLRuntimeException;
 import org.apache.sysml.runtime.matrix.data.MatrixBlock;
 import org.apache.sysml.runtime.matrix.data.SparseBlock;
 import org.apache.sysml.runtime.matrix.data.SparseBlockMCSR;
+import org.apache.sysml.runtime.util.IndexRange;
 import org.apache.sysml.runtime.util.MapReduceTool;
 
 /**
@@ -55,6 +56,11 @@ public abstract class MatrixReader
 
 	public abstract MatrixBlock readMatrixFromInputStream( InputStream is, long rlen, long clen, int brlen, int bclen, long estnnz )
 			throws IOException, DMLRuntimeException;
+
+        public MatrixBlock readSubMatrixFromHDFS(String fname, long rlen, long clen, int brlen, int bclen, long estnnz, IndexRange ixRange)
+            throws IOException, DMLRuntimeException {
+          return readMatrixFromHDFS(fname, rlen, clen, brlen, bclen, estnnz);
+        }
 	
 	/**
 	 * NOTE: mallocDense controls if the output matrix blocks is fully allocated, this can be redundant

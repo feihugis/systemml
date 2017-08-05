@@ -1,14 +1,8 @@
 package org.apache.sysml.examples
 
 import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.sysml.api.mlcontext._
 import org.apache.sysml.api.mlcontext.ScriptFactory._
-import org.apache.sysml.parser.Expression.ValueType
-import org.apache.sysml.runtime.controlprogram.caching.MatrixObject
-import org.apache.sysml.runtime.controlprogram.caching.MatrixObject.UpdateType
-import org.apache.sysml.runtime.io.{MatrixReaderFactory, MatrixWriter, MatrixWriterFactory}
-import org.apache.sysml.runtime.matrix.data.InputInfo
-import org.apache.sysml.runtime.util.MapReduceTool
+import org.apache.sysml.api.mlcontext._
 /**
   * Created by Fei Hu on 8/3/17.
   */
