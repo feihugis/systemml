@@ -545,7 +545,7 @@ public abstract class CacheableData<T extends CacheBlock> extends Data
               setDirty(false);
             }
             catch (IOException e) {
-              throw new CacheException("Reading of " + _hdfsFileName + " ("+getVarName()+") failed.", e);
+              throw new CacheException("SubReading of " + _hdfsFileName + " ("+getVarName()+") failed.", e);
             } catch (DMLRuntimeException e) {
               e.printStackTrace();
             }

@@ -1,5 +1,7 @@
 package org.apache.sysml.runtime.io;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.SequenceFile;
@@ -23,10 +25,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-/**
- * Created by Fei Hu on 8/4/17.
- */
 public class ReaderSubBinaryBlackParallel extends ReaderBinaryBlock {
+  protected static final Log LOG = LogFactory.getLog(ReaderSubBinaryBlackParallel.class.getName());
 
   private static int _numThreads = 1;
 
@@ -40,8 +40,8 @@ public class ReaderSubBinaryBlackParallel extends ReaderBinaryBlock {
                                         long estnnz, IndexRange ixRange)
       throws IOException, DMLRuntimeException {
     //allocate output matrix block (incl block allocation for parallel)
-    long rlen_ret = Math.min((ixRange.rowEnd/brlen - ixRange.rowStart/brlen + 1) * brlen, rlen);
-    long clen_ret = Math.min((ixRange.colEnd/bclen - ixRange.colStart/bclen + 1) * bclen, clen);
+    long rlen_ret = ixRange.rowEnd - ixRange.rowStart + 1; //Math.min((ixRange.rowEnd/brlen - ixRange.rowStart/brlen + 1) * brlen, rlen);
+    long clen_ret = ixRange.colEnd - ixRange.colStart + 1; //Math.min((ixRange.colEnd/bclen - ixRange.colStart/bclen + 1) * bclen, clen);
     MatrixBlock ret = createOutputMatrixBlock(rlen_ret, clen_ret, brlen, bclen, estnnz, true, true);
 
     //prepare file access
@@ -60,12 +60,7 @@ public class ReaderSubBinaryBlackParallel extends ReaderBinaryBlock {
       ret.recomputeNonZeros();
     ret.examSparsity();
 
-    IndexRange sub_ixRange = new IndexRange(ixRange.rowStart - ixRange.rowStart/brlen * brlen,
-                                            ixRange.rowEnd - ixRange.rowStart/brlen * brlen,
-                                            ixRange.colStart - ixRange.colStart/bclen * bclen,
-                                            ixRange.colEnd - ixRange.colStart/bclen * bclen);
-
-    return ret.sliceOperations(sub_ixRange, new MatrixBlock());
+    return ret;
   }
 
   private static void readSubBinaryBlockMatrixFromHDFS(Path path, JobConf job, FileSystem fs,
@@ -104,7 +99,7 @@ public class ReaderSubBinaryBlackParallel extends ReaderBinaryBlock {
 
       pool.shutdown();
     } catch (Exception e) {
-      throw new IOException("Failed parallel read of binary block input.", e);
+      throw new IOException("Failed parallel sub-read of binary block input.", e);
     }
   }
 
@@ -151,26 +146,31 @@ public class ReaderSubBinaryBlackParallel extends ReaderBinaryBlock {
         while (reader.next(key)) {
           int row_offset = (int) (key.getRowIndex() - 1) * _brlen;
           int col_offset = (int) (key.getColumnIndex() - 1) * _bclen;
+          int row_end = (int) Math.min(row_offset + _brlen - 1, _rlen);
+          int col_end = (int) Math.min(col_offset + _bclen - 1, _clen);
 
           int min_row = (int) Math.max(row_offset, _ixRange.rowStart);
           int min_col = (int) Math.max(col_offset, _ixRange.colStart);
-          int max_row = (int) Math.min(row_offset + _brlen, _ixRange.rowEnd);
-          int max_col = (int) Math.min(col_offset + _bclen, _ixRange.colEnd);
+          int max_row = (int) Math.min(row_end, _ixRange.rowEnd);
+          int max_col = (int) Math.min(col_end, _ixRange.colEnd);
 
           boolean isOverlapped = !((min_row > max_row) || (min_col > max_col));
 
           if (!isOverlapped) {
-            System.out.println("******** Filter out the key " + key.toString());
+            LOG.trace("Filter out the MatricBlock " + key.toString());
             continue;
           }
 
             reader.getCurrentValue(value);
             int rows = value.getNumRows();
             int cols = value.getNumColumns();
-            int row_offset_ret = (int) (row_offset - _ixRange.rowStart / _brlen * _brlen);
-            int col_offset_ret = (int) (col_offset - _ixRange.colStart / _bclen * _bclen);
 
-            System.out.println(String.format("------------ Key is (%d , %d) ~ (%d , %d), value size is %d", row_offset, col_offset, row_offset + rows, col_offset + cols, value.getInMemorySize()));
+            int row_offset_ret = (int) (min_row - _ixRange.rowStart);
+            int col_offset_ret = (int) (min_col - _ixRange.colStart);
+            int row_end_ret = (int) (max_row - _ixRange.rowStart);
+            int col_end_ret = (int) (max_col - _ixRange.colStart);
+
+            MatrixBlock sub_value = value.sliceOperations(min_row - row_offset, max_row - row_offset, min_col - col_offset, max_col - col_offset, new MatrixBlock());
 
             //bound check per block
             if (row_offset + rows < 0 || row_offset + rows > _rlen || col_offset + cols < 0
@@ -193,23 +193,26 @@ public class ReaderSubBinaryBlackParallel extends ReaderBinaryBlock {
                 if (sblock instanceof SparseBlockMCSR
                     && sblock.get(row_offset_ret) != null) {
                   synchronized (sblock.get(row_offset_ret)) {
-                    _dest.appendToSparse(value, row_offset_ret, col_offset_ret);
+                    _dest.appendToSparse(sub_value, row_offset_ret, col_offset_ret);
                   }
                 } else {
                   synchronized (_dest) {
-                    _dest.appendToSparse(value, row_offset_ret, col_offset_ret);
+                    _dest.appendToSparse(sub_value, row_offset_ret, col_offset_ret);
                   }
                 }
               } else { //quickpath (no synchronization)
-                _dest.appendToSparse(value, row_offset_ret, col_offset_ret);
+                _dest.appendToSparse(sub_value, row_offset_ret, col_offset_ret);
               }
             } else {
-              _dest.copy(row_offset_ret, row_offset_ret + rows - 1,
-                         col_offset_ret, col_offset_ret + cols - 1, value, false);
+              LOG.trace(String.format("Add the sub-matrixblock where row_offset_ret = %d, rows = %d, col_offset_ret = %d, cols = %d", row_offset, rows, col_offset_ret, cols));
+              _dest.copy(row_offset_ret, row_end_ret,
+                         col_offset_ret, col_end_ret, sub_value, false);
             }
             //aggregate nnz
             lnnz += value.getNonZeros();
           }
+      } catch (ArrayIndexOutOfBoundsException e) {
+        throw e;
       } finally {
         IOUtilFunctions.closeSilently(reader);
       }

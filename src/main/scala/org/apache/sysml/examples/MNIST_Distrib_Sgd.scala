@@ -23,12 +23,12 @@ object MNIST_Distrib_Sgd {
   }
 
   def createMNISTDummyData(X_file: String, Y_file: String, X_val_file: String, Y_val_file: String): Unit = {
-    val N = 32
+    val N = 3200
     val Nval = 32
     val Ntest = 32
     val C = 3
-    val Hin = 112
-    val Win = 112
+    val Hin = 28
+    val Win = 28
     val K = 10
 
     val clf = new Mnist_lenet_distrib_sgd()
@@ -69,18 +69,19 @@ object MNIST_Distrib_Sgd {
     //sc.setLogLevel("TRACE")
 
     val ml = new MLContext(sc)
+
     //configMLContext(ml)
 
     org.apache.sysml.api.DMLScript.rtplatform = org.apache.sysml.api.DMLScript.RUNTIME_PLATFORM.HYBRID_SPARK
 
     val clf = new Mnist_lenet_distrib_sgd_optimize()
 
-    val N = 32
+    val N = 3200
     val Nval = 32
     val Ntest = 32
     val C = 3
-    val Hin = 112
-    val Win = 112
+    val Hin = 28
+    val Win = 28
     val K = 10
     val batchSize = 2
     val paralellBatches = 2
@@ -91,12 +92,14 @@ object MNIST_Distrib_Sgd {
     val X_val_file = "scratch_space/X_val_input"
     val Y_val_file = "scratch_space/Y_val_input"
 
-    createMNISTDummyData(X_file, Y_file, X_val_file, Y_val_file)
+    //createMNISTDummyData(X_file, Y_file, X_val_file, Y_val_file)
 
     val X = readMatrix(X_file, ml)
     val Y = readMatrix(Y_file, ml)
     val X_val = readMatrix(X_val_file, ml)
     val Y_val = readMatrix(Y_val_file, ml)
+
+    X.toMatrixObject
 
     println(X.getMatrixMetadata)
 
