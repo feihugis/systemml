@@ -483,7 +483,7 @@ public abstract class CacheableData<T extends CacheBlock> extends Data
          * @throws CacheException if CacheException occurs
          */
         public synchronized T acquiresubSetRead(IndexRange ixRange)
-            throws CacheException
+            throws DMLRuntimeException
         {
           if( LOG.isTraceEnabled() )
             LOG.trace("Acquire read "+getVarName());
@@ -493,8 +493,12 @@ public abstract class CacheableData<T extends CacheBlock> extends Data
             throw new CacheException ("MatrixObject not available to read.");
 
           //get object from cache
-          if( _data == null )
+          if ( _data == null ) {
             getCache();
+            if (_data != null)
+              _data = (T) _data.sliceOperations((int) ixRange.rowStart, (int) ixRange.rowEnd, (int) ixRange.colStart, (int) ixRange.colEnd, _data);
+          }
+
 
           //call acquireHostRead if gpuHandle is set as well as is allocated
           boolean copiedFromGPU = false;

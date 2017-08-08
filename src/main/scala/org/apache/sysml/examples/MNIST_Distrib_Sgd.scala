@@ -23,7 +23,7 @@ object MNIST_Distrib_Sgd {
   }
 
   def createMNISTDummyData(X_file: String, Y_file: String, X_val_file: String, Y_val_file: String): Unit = {
-    val N = 3200
+    val N = 3200*10
     val Nval = 32
     val Ntest = 32
     val C = 3
@@ -76,7 +76,7 @@ object MNIST_Distrib_Sgd {
 
     val clf = new Mnist_lenet_distrib_sgd_optimize()
 
-    val N = 3200
+    val N = 3200*10
     val Nval = 32
     val Ntest = 32
     val C = 3

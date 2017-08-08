@@ -61,11 +61,15 @@ public final class MatrixIndexingCPInstruction extends IndexingCPInstruction
 			else //via slicing the in-memory matrix
 			{
 				//execute right indexing operation
-				//MatrixBlock matBlock = ec.getMatrixInput(input1.getName(), getExtendedOpcode());
-				//MatrixBlock resultBlock_old = matBlock.sliceOperations(ixrange, new MatrixBlock());
-
+                                Long t1 = System.currentTimeMillis();
                                 resultBlock = ec.subMatrixInput(input1.getName(), getExtendedOpcode(), ixrange);
 
+                                MatrixBlock matBlock = ec.getMatrixInput(input1.getName(), getExtendedOpcode());
+                                //resultBlock = matBlock.sliceOperations(ixrange, new MatrixBlock());
+
+
+                                double t = (System.currentTimeMillis() - t1) / 1000.0/1000.0;
+                                System.out.println(String.format("To subset variable %s with index range %s took %s ", input1.getName(), ixrange.toString(), t+""));
 				
 				//unpin rhs input
 				ec.releaseMatrixInput(input1.getName(), getExtendedOpcode());

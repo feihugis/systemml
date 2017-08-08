@@ -18,6 +18,7 @@ object MNIST_Distrib_Sgd_Dummy {
     conf.set("spark.testing.memory", memSize.toString)*/
 
     val sc = new SparkContext(conf)
+    sc.getConf.set()
     //sc.setLogLevel("TRACE")
 
     val ml = new MLContext(sc)
