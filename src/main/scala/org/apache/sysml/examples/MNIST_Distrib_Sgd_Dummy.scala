@@ -47,21 +47,16 @@ object MNIST_Distrib_Sgd_Dummy {
     val dummyVal = clf.generate_dummy_data(Nval, C, Hin, Win, K)
     val dummyTest = clf.generate_dummy_data(Ntest, C, Hin, Win, K)
 
-    val params = clf.train(dummy.X, dummy.Y, dummyVal.X, dummyVal.Y, C, Hin, Win, batchSize, paralellBatches, epochs)
-    println(params.toString)
 
 
     //dummy.X.toMatrixObject.setUpdateType(UpdateType.INPLACE)
     //dummy.X.toMatrixObject.setDirty(false)
     //dummy.Y.toMatrixObject.setDirty(false)
 
-    //println(dummy.X.toBinaryBlocks.count())
+    println(dummy.X.toBinaryBlocks.count())
 
-    //val dummyVal = clf.generate_dummy_data(Nval, C, Hin, Win, K)
-    //val dummyTest = clf.generate_dummy_data(Ntest, C, Hin, Win, K)
-
-    //val params = clf.train(dummy.X, dummy.Y, dummyVal.X, dummyVal.Y, C, Hin, Win, batchSize, paralellBatches, epochs)
-    //println(params.toString)
+    val params = clf.train(dummy.X, dummy.Y, dummyVal.X, dummyVal.Y, C, Hin, Win, batchSize, paralellBatches, epochs)
+    println(params.toString)
 
     //val probs = clf.predict(dummyTest.X, C, Hin, Win, params.W1, params.b1, params.W2, params.b2, params.W3, params.b3, params.W4, params.b4)
     //val perf = clf.eval(probs, dummyTest.Y)

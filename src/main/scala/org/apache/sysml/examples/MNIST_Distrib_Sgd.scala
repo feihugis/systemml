@@ -23,7 +23,7 @@ object MNIST_Distrib_Sgd {
   }
 
   def createMNISTDummyData(X_file: String, Y_file: String, X_val_file: String, Y_val_file: String): Unit = {
-    val N = 3200*10
+    val N = 3200
     val Nval = 32
     val Ntest = 32
     val C = 3
@@ -99,7 +99,7 @@ object MNIST_Distrib_Sgd {
     val X_val = readMatrix(X_val_file, ml)
     val Y_val = readMatrix(Y_val_file, ml)
 
-    X.toMatrixObject
+    println(X.toBinaryBlocks.count())
 
     println(X.getMatrixMetadata)
 
