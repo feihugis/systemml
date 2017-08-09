@@ -496,7 +496,7 @@ public abstract class CacheableData<T extends CacheBlock> extends Data
           if ( _data == null ) {
             getCache();
             if (_data != null)
-              _data = (T) _data.sliceOperations((int) ixRange.rowStart, (int) ixRange.rowEnd, (int) ixRange.colStart, (int) ixRange.colEnd, _data);
+              _data = (T) _data.sliceOperations((int) ixRange.rowStart, (int) ixRange.rowEnd, (int) ixRange.colStart, (int) ixRange.colEnd, null);
           }
 
 
