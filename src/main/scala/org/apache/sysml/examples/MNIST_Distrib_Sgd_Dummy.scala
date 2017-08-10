@@ -2,7 +2,7 @@ package org.apache.sysml.examples
 
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.sysml.api.mlcontext._
-import org.apache.sysml.scripts.nn.examples.Mnist_lenet_distrib_sgd
+import org.apache.sysml.scripts.nn.examples.{Mnist_lenet_distrib_sgd, Mnist_lenet_distrib_sgd_optimize}
 
 /**
   * Created by Fei Hu on 8/3/17.
@@ -30,11 +30,11 @@ object MNIST_Distrib_Sgd_Dummy {
 
     org.apache.sysml.api.DMLScript.rtplatform = org.apache.sysml.api.DMLScript.RUNTIME_PLATFORM.HYBRID_SPARK
 
-    val clf = new Mnist_lenet_distrib_sgd()
+    val clf = new Mnist_lenet_distrib_sgd_optimize
 
-    val N = 3200
-    val Nval = 32
-    val Ntest = 32
+    val N = 32
+    val Nval = 16
+    val Ntest = 16
     val C = 3
     val Hin = 112
     val Win = 112
@@ -47,13 +47,12 @@ object MNIST_Distrib_Sgd_Dummy {
     val dummyVal = clf.generate_dummy_data(Nval, C, Hin, Win, K)
     val dummyTest = clf.generate_dummy_data(Ntest, C, Hin, Win, K)
 
-
-
     //dummy.X.toMatrixObject.setUpdateType(UpdateType.INPLACE)
     //dummy.X.toMatrixObject.setDirty(false)
     //dummy.Y.toMatrixObject.setDirty(false)
 
     println(dummy.X.toBinaryBlocks.count())
+
 
     val params = clf.train(dummy.X, dummy.Y, dummyVal.X, dummyVal.Y, C, Hin, Win, batchSize, paralellBatches, epochs)
     println(params.toString)

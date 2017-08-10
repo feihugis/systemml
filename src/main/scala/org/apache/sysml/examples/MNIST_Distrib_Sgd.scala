@@ -3,7 +3,7 @@ package org.apache.sysml.examples
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.sysml.api.mlcontext.ScriptFactory.dml
 import org.apache.sysml.api.mlcontext._
-import org.apache.sysml.scripts.nn.examples.{Mnist_lenet_distrib_sgd}
+import org.apache.sysml.scripts.nn.examples.{Mnist_lenet_distrib_sgd, Mnist_lenet_distrib_sgd_optimize}
 
 object MNIST_Distrib_Sgd {
 
@@ -74,7 +74,7 @@ object MNIST_Distrib_Sgd {
 
     org.apache.sysml.api.DMLScript.rtplatform = org.apache.sysml.api.DMLScript.RUNTIME_PLATFORM.HYBRID_SPARK
 
-    val clf = new Mnist_lenet_distrib_sgd()
+    val clf = new Mnist_lenet_distrib_sgd_optimize()
 
     val N = 3200
     val Nval = 32
