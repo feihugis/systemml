@@ -288,7 +288,7 @@ public class ConvolutionOp extends Hop  implements MultiThreadedHop
 		}
 		
 		if(LOG.isDebugEnabled() && (ret[0] <= 0 || ret[1] <= 0)) {
-			LOG.debug("Unknown dimensions for ConvolutionOp in inferOutputCharacteristics:" + op.name() + " " + ret[0] + " " + ret[1] + 
+			LOG.warn("Unknown dimensions for ConvolutionOp in inferOutputCharacteristics:" + op.name() + " " + ret[0] + " " + ret[1] +
 					" img_dim=[" + params.N + " " + params.C + " " + params.H + " " + params.W + "]" +
 					" filter_dim=[" + params.K + " " + params.C + " " + params.H + " " + params.W + "]" + 
 					" output_feature_map=[" + params.P + " " + params.Q + "] stride=[" + params.stride_h + " " + params.stride_w + "]" +

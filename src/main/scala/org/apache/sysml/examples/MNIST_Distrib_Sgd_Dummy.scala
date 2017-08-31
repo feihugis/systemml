@@ -2,7 +2,7 @@ package org.apache.sysml.examples
 
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.sysml.api.mlcontext._
-import org.apache.sysml.scripts.nn.examples.{Mnist_lenet_distrib_sgd, Mnist_lenet_distrib_sgd_optimize}
+import org.apache.sysml.scripts.nn.examples.Mnist_lenet_distrib_sgd_optimize
 
 /**
   * Created by Fei Hu on 8/3/17.

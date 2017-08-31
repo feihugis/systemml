@@ -3,7 +3,7 @@ package org.apache.sysml.examples
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.sysml.api.mlcontext.ScriptFactory.dml
 import org.apache.sysml.api.mlcontext._
-import org.apache.sysml.scripts.nn.examples.{Mnist_lenet_distrib_sgd, Mnist_lenet_distrib_sgd_optimize}
+import org.apache.sysml.scripts.nn.examples.{Mnist_lenet_distrib_sgd, Mnist_lenet_distrib_sgd_optimize, Mnist_lenet_distrib_sgd_train_only}
 
 object MNIST_Distrib_Sgd {
 
@@ -23,7 +23,7 @@ object MNIST_Distrib_Sgd {
   }
 
   def createMNISTDummyData(X_file: String, Y_file: String, X_val_file: String, Y_val_file: String): Unit = {
-    val N = 3200
+    val N = 32
     val Nval = 32
     val Ntest = 32
     val C = 3
@@ -56,7 +56,7 @@ object MNIST_Distrib_Sgd {
     ml.setStatisticsMaxHeavyHitters(10000)
     ml.setConfigProperty("systemml.stats.finegrained", "true")
     ml.setExplain(true)
-    ml.setExplainLevel(MLContext.ExplainLevel.RECOMPILE_RUNTIME)
+    ml.setExplainLevel(MLContext.ExplainLevel.RUNTIME)
   }
 
   /**
@@ -69,14 +69,13 @@ object MNIST_Distrib_Sgd {
     //sc.setLogLevel("TRACE")
 
     val ml = new MLContext(sc)
-
-    //configMLContext(ml)
+    configMLContext(ml)
 
     org.apache.sysml.api.DMLScript.rtplatform = org.apache.sysml.api.DMLScript.RUNTIME_PLATFORM.HYBRID_SPARK
 
-    val clf = new Mnist_lenet_distrib_sgd_optimize()
+    val clf = new Mnist_lenet_distrib_sgd_train_only()
 
-    val N = 3200
+    val N = 32
     val Nval = 32
     val Ntest = 32
     val C = 3
@@ -99,9 +98,8 @@ object MNIST_Distrib_Sgd {
     val X_val = readMatrix(X_val_file, ml)
     val Y_val = readMatrix(Y_val_file, ml)
 
-    println(X.toBinaryBlocks.count())
-
-    println(X.getMatrixMetadata)
+    //println(X.toBinaryBlocks.count())
+    //println(X.getMatrixMetadata)
 
     val params = clf.train(X, Y, X_val, Y_val, C, Hin, Win, batchSize, paralellBatches, epochs)
     println(params.toString)

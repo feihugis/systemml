@@ -158,7 +158,7 @@ public class OptimizationWrapper
 			{
 				try {
 					tree = OptTreeConverter.createOptTree(ck, cm, opt.getPlanInputType(), sb, pb, ec); 
-					LOG.debug("ParFOR Opt: Input plan (before recompilation):\n" + tree.explain(false));
+					LOG.debug("ParFOR Opt: Input plan (before recompilation):\n" + tree.explain(true));
 					OptTreeConverter.clear();
 				}
 				catch(Exception ex)
@@ -201,8 +201,11 @@ public class OptimizationWrapper
 				//(tid=0, because deep copies created after opt)
 				LocalVariableMap tmp = (LocalVariableMap) ec.getVariables().clone();
 				Recompiler.recompileProgramBlockHierarchy(pb.getChildBlocks(), tmp, 0, true);
+
+
 				
 				//inter-procedural optimization (based on previous recompilation)
+
 				if( pb.hasFunctions() ) {
 					InterProceduralAnalysis ipa = new InterProceduralAnalysis(sb);
 					Set<String> fcand = ipa.analyzeSubProgram();
