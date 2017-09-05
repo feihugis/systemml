@@ -20,7 +20,10 @@
 package org.apache.sysml.hops;
 
 import org.apache.sysml.hops.AggBinaryOp.SparkAggType;
+import org.apache.sysml.hops.recompile.Recompiler;
 import org.apache.sysml.hops.rewrite.HopRewriteUtils;
+import org.apache.sysml.hops.rewrite.ProgramRewriteStatus;
+import org.apache.sysml.hops.rewrite.RewriteConstantFolding;
 import org.apache.sysml.lops.Aggregate;
 import org.apache.sysml.lops.Data;
 import org.apache.sysml.lops.Group;
@@ -31,6 +34,8 @@ import org.apache.sysml.lops.LopProperties.ExecType;
 import org.apache.sysml.parser.Expression.DataType;
 import org.apache.sysml.parser.Expression.ValueType;
 import org.apache.sysml.runtime.matrix.MatrixCharacteristics;
+
+import java.util.Stack;
 
 //for now only works for range based indexing op
 public class IndexingOp extends Hop 
@@ -394,7 +399,24 @@ public class IndexingOp extends Hop
 	@Override
 	public void refreshSizeInformation()
 	{
-		Hop input2 = getInput().get(1); //inpRowL
+                /*RewriteConstantFolding rewriteConstantFolding = new RewriteConstantFolding();
+                try {
+                  Hop root = Recompiler.deepCopyHopsDag(this);
+                  root._visited = false;
+                  Stack<Hop> stack = new Stack<>();
+                  stack.add(root);
+                  while (!stack.isEmpty()) {
+                    Hop hop = stack.pop();
+                    hop._visited = false;
+                    if (hop.getInput() != null) stack.addAll(hop.getInput());
+                  }
+
+                  rewriteConstantFolding.rewriteHopDAG(root, new ProgramRewriteStatus());
+                  System.out.println(root);
+                } catch (HopsException e) {
+                  e.printStackTrace();
+                }*/
+                Hop input2 = getInput().get(1); //inpRowL
 		Hop input3 = getInput().get(2); //inpRowU
 		Hop input4 = getInput().get(3); //inpColL
 		Hop input5 = getInput().get(4); //inpColU

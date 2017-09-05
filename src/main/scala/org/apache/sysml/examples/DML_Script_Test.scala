@@ -12,7 +12,7 @@ object DML_Script_Test {
     ml.setStatisticsMaxHeavyHitters(10000)
     ml.setConfigProperty("systemml.stats.finegrained", "true")
     ml.setExplain(true)
-    ml.setExplainLevel(MLContext.ExplainLevel.RUNTIME)
+    ml.setExplainLevel(MLContext.ExplainLevel.HOPS)
   }
 
   def main(args: Array[String]): Unit = {
@@ -30,15 +30,23 @@ object DML_Script_Test {
          b = 80
          x = min(a, b)
          y = a - b
-         m = rand (rows = x, cols = y)
+         m = read("scratch_space/X_input")
          gap = 10
-         parfor (i in 1:y) {
-          batch_beg = (min(x, b) - gap) %% nrow(m)
-          batch_end = batch_beg + i
-          m_batch = m[batch_beg:batch_end,]
-          val_max = max(m_batch)
+
+         print (nrow(m))
+
+         parfor (i in 1:y, log=DEBUG) {
+           batch_beg = (min(x, b) - gap) %% nrow(m)
+           batch_end = batch_beg + i
+           m_batch = m[batch_beg:batch_end, 1:100]
+           val_max = max(m_batch)
+           print (val_max)
          }
       """
+
+    /*
+    *
+    * */
 
     val scr = dml(s).out("m")
     val res = ml.execute(scr)

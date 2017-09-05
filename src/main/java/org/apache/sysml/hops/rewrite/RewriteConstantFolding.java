@@ -184,7 +184,7 @@ public class RewriteConstantFolding extends HopRewriteRule
 	 * @throws IOException if IOException occurs
 	 * @throws HopsException if HopsException occurs
 	 */
-	private LiteralOp evalScalarOperation( Hop bop ) 
+	public LiteralOp evalScalarOperation( Hop bop )
 		throws LopsException, DMLRuntimeException, IOException, HopsException
 	{
 		//Timing time = new Timing( true );

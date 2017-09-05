@@ -56,7 +56,7 @@ object MNIST_Distrib_Sgd {
     ml.setStatisticsMaxHeavyHitters(10000)
     ml.setConfigProperty("systemml.stats.finegrained", "true")
     ml.setExplain(true)
-    ml.setExplainLevel(MLContext.ExplainLevel.RUNTIME)
+    ml.setExplainLevel(MLContext.ExplainLevel.RECOMPILE_RUNTIME)
   }
 
   /**

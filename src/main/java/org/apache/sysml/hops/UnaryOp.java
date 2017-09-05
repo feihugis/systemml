@@ -694,6 +694,10 @@ public class UnaryOp extends Hop implements MultiThreadedHop
 		if ( getDataType() == DataType.SCALAR ) 
 		{
 			//do nothing always known
+                  setDim1(0);
+                  setDim2(2);
+                  _memEstimate = 8.0;
+                  _outputMemEstimate  = 8.0;
 		}
 		else if( _op == OpOp1.CAST_AS_MATRIX && getInput().get(0).getDataType()==DataType.SCALAR )
 		{
@@ -706,6 +710,7 @@ public class UnaryOp extends Hop implements MultiThreadedHop
 			// If output is a Matrix then this operation is of type (B = op(A))
 			// Dimensions of B are same as that of A, and sparsity may/maynot change
 			Hop input = getInput().get(0);
+			input.refreshSizeInformation();
 			setDim1( input.getDim1() );
 			setDim2( input.getDim2() );
 			if( _op==OpOp1.ABS || _op==OpOp1.COS || _op==OpOp1.SIN || _op==OpOp1.TAN  
